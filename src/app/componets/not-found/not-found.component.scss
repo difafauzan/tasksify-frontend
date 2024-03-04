@@ -1,0 +1,22 @@
+.page-success {
+  .row-login {
+    min-height: 75vh;
+  }
+  .section-success {
+    h2 {
+      font-size: 28px;
+      color: #0c0d36;
+      font-weight: 200;
+      margin-top: 0;
+    }
+
+    .form-control {
+      background: #f3f3f3;
+      border-radius: 1px;
+    }
+
+    .btn-signup {
+      color: #bbbbbb;
+    }
+  }
+}

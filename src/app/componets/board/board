@@ -1,0 +1,121 @@
+<div class="col-12">
+  <div class="card-body">
+    <ul class="box-info">
+      <li class="mb-3">
+        <div
+          class="icon-text-container"
+          data-bs-toggle="modal"
+          data-bs-target="#createBoardModal"
+        >
+          <i class="bx bxs-message-alt-add"></i>
+          <span class="text">
+            <p>Create New Board</p>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="d-flex justify-content-start">
+  <div class="card-container col-12">
+    <div class="card" *ngFor="let row of boardData">
+      <div class="card-body">
+        <h5 class="card-title">{{ row.title }}</h5>
+        <p class="card-text">{{ row.description }}</p>
+        <button (click)="onEditBoard(row)" class="btn btn-success">Edit</button>
+        <button (click)="deleteBoard(row)" class="btn btn-danger mx-3">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="createBoardModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create New Board</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- Add your form elements for creating a new board here -->
+        <form [formGroup]="boardForm">
+          <!-- Example form elements -->
+          <div class="mb-3">
+            <label for="boardTitle" class="form-label">Board Title</label>
+            <input
+              formControlName="title"
+              type="text"
+              class="form-control"
+              id="boardTitle"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="boardDescription" class="form-label"
+              >Board Description</label
+            >
+            <input
+              type="text"
+              formControlName="description"
+              class="form-control"
+              id="exmapleInputEmail1"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          id="cancel"
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button
+          (click)="postBoardDetails()"
+          type="button"
+          class="btn btn-primary"
+        >
+          Create Board
+        </button>
+        <button
+          (click)="updateBoardDetails()"
+          type="button"
+          class="btn btn-primary"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <li class="mb-1">
+        <div
+          class="icon-text-container"
+          data-bs-toggle="modal"
+          data-bs-target="#createBoardModal"
+        >
+          <i class="bx bxs-message-alt-add"></i>
+          <span class="text" style="margin-left: 20px">
+            <p>Create New Board</p>
+          </span>
+        </div>
+      </li> -->
+
+<button (click)="onEditBoard(row)" class="btn btn-success">Edit</button>
+<button (click)="deleteBoard(row)" class="btn btn-danger mx-3">Delete</button>
