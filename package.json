@@ -26,6 +26,7 @@
     "ngx-cookie-service": "^17.0.1",
     "ngx-toastr": "^18.0.0",
     "nodemailer": "^6.9.8",
+    "npm": "^10.5.0",
     "quill": "1.3.7",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
