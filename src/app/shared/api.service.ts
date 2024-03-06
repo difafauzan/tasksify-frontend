@@ -8,90 +8,91 @@ import { response } from 'express';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(
-    private http: HttpClient,
-    private response: Response,
-    private cookies: CookieService
-  ) {
-  }
-  // // api task
-  // postTask(data: any) {
-  //   return this.http.post<any>('http://192.168.1.19:3000/task', data).pipe(
-  //     map((response: any) => {
-  //       return response;
-  //     })
-  //   );
-  // }
-  // getTask() {
-  //   return this.http.get<any>('http://192.168.1.19:3000/task').pipe(
-  //     map((response: any) => {
-  //       return response;
-  //     })
-  //   );
-  // }
-  // updateTask(data: any, id: any) {
-  //   return this.http
-  //     .put<any>('http://192.168.1.19:3000/task/' + id, data)
-  //     .pipe(
-  //       map((response: any) => {
-  //         return response;
-  //       })
-  //     );
-  // // }
-  // deleteTask(id: any) {
-  //   return this.http.delete<any>('http://192.168.1.19:3000/task/' + id).pipe(
-  //     map((response: any) => {
-  //       return response;
-  //     })
-  //   );
-  // }
-  // Api Board
-  postBoard(data: any) {
-    console.log(data);
-    return this.http.post('http://192.168.1.19:3000/board/create', data).pipe(
+  constructor(private http: HttpClient, private cookies: CookieService) {}
+
+  getUsers() {
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+
+    return this.http.get('http://192.168.129.130:3000/user', options).pipe(
       map((response: any) => {
-        // console.log(data);
         return response;
       })
     );
+  }
+
+  // Api Board
+  postBoard(data: any) {
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+    // console.log(data);
+    return this.http
+      .post('http://192.168.129.130:3000/board/create', data, options)
+      .pipe(
+        map((response: any) => {
+          // console.log(data);
+          return response;
+        })
+      );
   }
 
   getBoard(userId: number) {
     // Set access token
-    let accessToken = this.cookies.get('access-token')
+    let accessToken = this.cookies.get('access-token');
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+accessToken
+      Authorization: 'Bearer ' + accessToken,
     });
-    let options = {headers: headers};
-    
+    let options = { headers: headers };
+
     let data = { userId: userId };
-    return this.http.post('http://192.168.1.19:3000/board', data, options).pipe(
+    return this.http.post('http://192.168.129.130:3000/board', data, options).pipe(
       map((response: any) => {
-        console.log(response);
+        // console.log(response);
         return response;
       })
     );
   }
 
-  getBoardById(id: any) {    // Set access token
-    let accessToken = this.cookies.get('access-token')
+  getBoardById(id: any) {
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+accessToken
+      Authorization: 'Bearer ' + accessToken,
     });
-    let options = {headers: headers};
+    let options = { headers: headers };
 
-    return this.http.get<any>('http://192.168.1.19:3000/board/' + id, options).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
+    return this.http
+      .get<any>('http://192.168.129.130:3000/board/' + id, options)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
   }
 
   updateBoard(data: any, id: any) {
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+
     return this.http
-      .patch<any>('http://192.168.1.19:3000/board/' + id, data)
+      .patch<any>('http://192.168.129.130:3000/board/' + id, data, options)
       .pipe(
         map((response: any) => {
           return response;
@@ -100,16 +101,34 @@ export class ApiService {
   }
 
   deleteBoard(id: any) {
-    return this.http.delete<any>('http://192.168.1.19:3000/board/' + id).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+
+    return this.http
+      .delete<any>('http://192.168.129.130:3000/board/' + id, options)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
   }
   // end board api
   // Start API list
   postList(data: any) {
-    return this.http.post('http://192.168.1.19:3000/list', data).pipe(
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+
+    return this.http.post('http://192.168.129.130:3000/list', data, options).pipe(
       map((response: any) => {
         return response;
       })
@@ -117,7 +136,14 @@ export class ApiService {
   }
 
   getList() {
-    return this.http.get<any>('http://192.168.1.19:3000/list').pipe(
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+    return this.http.get<any>('http://192.168.129.130:3000/list', options).pipe(
       map((response: any) => {
         return response;
       })
@@ -125,8 +151,15 @@ export class ApiService {
   }
 
   updateList(data: any, id: any) {
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
     return this.http
-      .patch<any>('http://192.168.1.19:3000/list/' + id, data)
+      .patch<any>('http://192.168.129.130:3000/list/' + id, data, options)
       .pipe(
         map((response: any) => {
           return response;
@@ -135,24 +168,49 @@ export class ApiService {
   }
 
   deleteList(id: any) {
-    return this.http.delete<any>('http://192.168.1.19:3000/list/' + id).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+    return this.http
+      .delete<any>('http://192.168.129.130:3000/list/' + id, options)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
   }
   // End List API
   // start tasks API
   postTask(data: any) {
-    return this.http.post('http://192.168.1.19:3000/task/create', data).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+    return this.http
+      .post('http://192.168.129.130:3000/task/create', data, options)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
   }
 
   getTask() {
-    return this.http.get<any>('http://192.168.1.19:3000/task').pipe(
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+    return this.http.get<any>('http://192.168.129.130:3000/task', options).pipe(
       map((response: any) => {
         return response;
       })
@@ -160,20 +218,59 @@ export class ApiService {
   }
 
   updateTask(data: any, id: any) {
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
     console.log(data, id);
-    return this.http.put<any>('http://192.168.1.19:3000/task/' + id, data).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
+    return this.http
+      .put<any>('http://192.168.129.130:3000/task/' + id, data, options)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
   }
 
   deleteTask(id: any) {
-    return this.http.delete<any>('http://192.168.1.19:3000/task/' + id).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+    return this.http
+      .delete<any>('http://192.168.129.130:3000/task/' + id, options)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
+  addColab(data: any) {
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+
+    return this.http
+      .post<any>(
+        'http://192.168.129.130:3000/board-members/add-member/',
+        data,
+        options
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
   }
   // end tasks API
   ngOnInit(): void {

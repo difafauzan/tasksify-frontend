@@ -42,7 +42,6 @@ const routes: Routes = [
       },
     ],
   },
-
   // Style component
   { path: 'sidebar', component: SidebarComponent },
   { path: 'navbar', component: NavbarComponent },

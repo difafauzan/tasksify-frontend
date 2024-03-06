@@ -33,23 +33,22 @@
 <section id="content">
   <!-- NAVBAR -->
   <nav>
-    <i class="bx bx-menu"></i>
+    <i class="bx bx-menu" (click)="toggleSidebar($event)"></i>
 
     <form action="#"></form>
-    <input type="checkbox" id="switch-mode" hidden />
-    <label for="switch-mode" class="switch-mode"></label>
-    <a href="#" class="notification">
-      <i class="bx bxs-bell"></i>
-      <span class="num">8</span>
-    </a>
-    <a class="nav-link">Hi, Difa </a>
-    <a class="profile">
-      <!-- Uncomment the following line if you want to include the image from a local path -->
-      <!-- <img src="../../../assets/img/people.png" alt="Profile Image" /> -->
+    <input
+      type="checkbox"
+      id="switch-mode"
+      hidden
+      (change)="toggleDarkMode($event)"
+    />
 
-      <!-- Use the following line if you want to generate a profile image using the ui-avatars.com API -->
+    <label for="switch-mode" class="switch-mode"></label>
+
+    <a class="nav-link">Hi, {{ username }} </a>
+    <a class="profile">
       <img
-        src="https://ui-avatars.com/api/name=Difa"
+        src="https://ui-avatars.com/api/name={{ username }}"
         alt="Profile Image"
         height="60"
         class="rounded-circle"
@@ -61,20 +60,47 @@
   <!-- MAIN -->
   <main>
     <div class="head-title">
-      <div class="left">
-        <h1>{{ boardName }}</h1>
-        <ul class="breadcrumb">
-          <li>
-            <a href="#">My Task</a>
-          </li>
-          <li><i class="bx bx-chevron-right"></i></li>
-          <li>
-            <a class="active" href="#">Project</a>
-          </li>
-        </ul>
+      <div class="left d-flex">
+        <h1 style="margin-right: 24px">{{ boardName }}</h1>
+
+        <div *ngFor="let user of users">
+          <a class="profile" style="margin-right: -8px">
+            <img
+              src="https://ui-avatars.com/api/name={{
+                user.name
+              }}&background=random"
+              alt="Profile Image"
+              height="40"
+              class="rounded-circle"
+              style="border: 3px solid #ff00dd"
+            />
+          </a>
+          <!-- <ul class="breadcrumb">
+            <li>
+              <a href="#">My Task</a>
+            </li>
+            <li><i class="bx bx-chevron-right"></i></li>
+            <li>
+              <a class="active" href="#">Project</a>
+            </li>
+          </ul> -->
+        </div>
+        <a
+          class="profile"
+          style="margin-right: -8px"
+          data-bs-toggle="modal"
+          data-bs-target="#addColabAvatar"
+        >
+          <img
+            src="https://ui-avatars.com/api/name=+"
+            alt="Profile Image"
+            height="40"
+            class="rounded-circle"
+            style="border: 3px solid #ff00dd; cursor: pointer"
+          />
+        </a>
       </div>
       <a
-        href="#"
         data-bs-toggle="modal"
         data-bs-target="#createListModal"
         class="bx bxs-message-square-add"
@@ -96,6 +122,7 @@
               (click)="setSelected(list.id)"
               data-bs-toggle="modal"
               data-bs-target="#createTaskModal"
+              data-bs-dismiss="modal"
               class="bx bx-plus"
             ></i>
             <i
@@ -107,6 +134,7 @@
                 mat-menu-item
                 data-bs-toggle="modal"
                 data-bs-target="#editListModal"
+                data-bs-dismiss="modal"
                 (click)="onEditList(list)"
               >
                 <i class="bx bx-edit" style="margin-right: 8px"> </i>
@@ -128,7 +156,7 @@
             <li
               class="not-completed example-box"
               [style.background-color]="
-                task.state == 'empty' ? '#FAFAFA' : 'white'
+                task.state == 'empty' ? '#EEEEEE' : 'white'
               "
               [style.border-left]="task.state == 'empty' ? '0px' : ''"
               *ngFor="let task of list.tasks; let i = index"
@@ -137,6 +165,7 @@
               [cdkDragDisabled]="task.state == 'empty' ? true : false"
             >
               {{ task.title }}
+              @if(task.state != 'empty'){
               <i
                 class="bx bx-dots-vertical-rounded icon-right"
                 [matMenuTriggerFor]="menu"
@@ -156,6 +185,7 @@
                   Delete
                 </button>
               </mat-menu>
+              }
             </li>
             <div class="example-list"></div>
           </ul>
@@ -163,7 +193,6 @@
       </div>
       }
     </div>
-
     <!-- End component Kanban -->
 
     <!-- list modal -->
@@ -214,6 +243,7 @@
               pButton
               pRipple
               (click)="postList()"
+              data-bs-dismiss="modal"
             >
               Save
             </button>
@@ -223,6 +253,7 @@
               class="btn btn-primary"
               (click)="updateList()"
               *ngIf="false"
+              data-bs-dismiss="modal"
             >
               Update
             </button>
@@ -280,6 +311,7 @@
               (click)="updateList()"
               type="button"
               class="btn btn-primary"
+              data-bs-dismiss="modal"
             >
               Update List
             </button>
@@ -351,7 +383,12 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary" (click)="postTask()">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="postTask()"
+              data-bs-dismiss="modal"
+            >
               Add
             </button>
             <button
@@ -368,6 +405,7 @@
     </div>
     <!-- end task modal -->
 
+    <!-- start modal edit -->
     <div
       class="modal fade"
       id="editTaskModal"
@@ -436,6 +474,7 @@
               (click)="updateTask()"
               type="button"
               class="btn btn-primary"
+              data-bs-dismiss="modal"
             >
               Update Task
             </button>
@@ -444,6 +483,102 @@
       </div>
     </div>
     <!-- end modal edit -->
+
+    <!-- start modal colab -->
+    <div
+      class="modal fade"
+      id="addColabAvatar"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Colaborator</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Add your form elements for editing a board here -->
+            <form [formGroup]="memberForm">
+              <!-- Example form elements -->
+              <div class="mb-3 d-flex flex-column">
+                <label for="member" class="form-label">Member</label>
+                <select
+                  formControlName="user_id"
+                  name="user_id"
+                  class="custom-select"
+                >
+                  <option selected disabled>Select the collaborators</option>
+                  <option *ngFor="let user of notMemberUsers" [value]="user.id">
+                    {{ user.name }}
+                  </option>
+                </select>
+              </div>
+            </form>
+            <div *ngFor="let user of users">
+              <a class="profile d-flex w-100 m-0 mb-2" style="width: 100%">
+                <img
+                  src="https://ui-avatars.com/api/name={{ user.name }}"
+                  alt="Profile Image"
+                  height="40"
+                  class="rounded-circle"
+                  style="border: 3px solid #ff00dd"
+                />
+                <div
+                  class="d-flex"
+                  style="
+                    margin-left: 8px;
+                    justify-content: space-between;
+                    width: 100%;
+                  "
+                >
+                  <div class="d-block">
+                    <span
+                      class="text-dark"
+                      style="font-size: 16px; font-weight: bold"
+                      >{{ user.name }} (Member)</span
+                    >
+                    <br />
+                    <span class="text-dark" style="font-size: 12px">{{
+                      user.email
+                    }}</span>
+                  </div>
+
+                  <button type="button" class="btn btn-sm btn-danger">
+                    Remove
+                  </button>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              id="cancel"
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+            >
+              Add Members
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end modal page colab -->
   </main>
 
   <!-- MAIN -->

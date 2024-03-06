@@ -13,6 +13,7 @@ export class AuthGuard {
       return true;
     }
     alert('You dont have access!');
+    
     return false;
   }
 }

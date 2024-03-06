@@ -19,6 +19,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { updateListModel, updateTaskModel } from './update.kanban.model';
 import { map } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-kanban',
@@ -28,6 +29,7 @@ import { map } from 'rxjs';
 export class KanbanComponent {
   // form
   kanbanForm!: FormGroup;
+  memberForm!: any;
 
   // model
   listModelObj: listModel = new listModel();
@@ -58,6 +60,9 @@ export class KanbanComponent {
   private boardId: any;
   private positionId: any;
   task: any;
+  username?: string;
+  users!: any[];
+  notMemberUsers!: any[];
 
   constructor(
     // private ucok: formatDat,
@@ -66,7 +71,8 @@ export class KanbanComponent {
     private router: Router,
     private renderer: Renderer2,
     private cookies: CookieService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -78,11 +84,25 @@ export class KanbanComponent {
       description: ['', Validators.required],
       due_date: ['', Validators.required],
     });
+    this.memberForm = this.fb.group({
+      user_id: ['', Validators.required],
+    });
+    this.loadExternalScript('/src/assets/js/script.js');
+    this.username = this.cookies.get('user-name');
 
     this.route.params.subscribe((params) => {
       this.boardId = params['id'];
     });
     this.getAllList();
+    this.processNonMemberUser();
+  }
+
+  processNonMemberUser() {
+    this.api.getUsers().subscribe((res: any) => {
+      this.notMemberUsers = res;
+    });
+    // this.notMemberUsers = nonmember;
+    // console.log(this.notMemberUsers);
   }
 
   createInitialTask(list_id: number) {
@@ -98,7 +118,10 @@ export class KanbanComponent {
         this.getAllList();
       },
       (error) => {
-        alert('Task Error!');
+        this._snackBar.open('Task Error!', '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
       }
     );
   }
@@ -113,7 +136,11 @@ export class KanbanComponent {
       (res) => {
         this.createInitialTask(res.id);
 
-        alert('Post Added Succesfully!');
+        // alert('Post Added Succesfully!');
+        this._snackBar.open('Post Added Successfully!.', '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
 
         let ref = document.getElementById('cancel');
         ref?.click();
@@ -122,16 +149,26 @@ export class KanbanComponent {
         // this.showTaskList = false;
       },
       (error) => {
-        alert('Something Error!');
+        // alert('Something Error!');
+        this._snackBar.open('Something went wrong!.', '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
       }
     );
   }
 
   async getAllList() {
     return this.api.getBoardById(this.boardId).subscribe((res: any) => {
+      // console.log(res);
+      let temp = [];
+      for (let n = 0; n < res.board_members.length; n++) {
+        temp.push(res.board_members[n].user);
+      }
+      this.users = temp;
+      // console.log(this.users);
       this.listData = res.lists;
       this.listData.forEach((val: any) => {
-        console.log(val.tasks.length);
         if (val.tasks.length === 0) {
           val.tasks = [{ id: 0, title: 'This list is empty!', state: 'empty' }];
         }
@@ -150,22 +187,29 @@ export class KanbanComponent {
   updateList() {
     this.showAdd = false;
     this.showUpdate = true;
-    console.log();
     this.updateListModelObj.name = this.kanbanForm.value.name;
     this.api
       .updateList(this.updateListModelObj, this.listModelObj.id)
       .subscribe(
         (res) => {
           console.log(res);
-          alert('List updated successfully!');
+          // alert('List updated successfully!');
+          this._snackBar.open('List Added Succesfully!.', '', {
+            duration: 2000,
+            verticalPosition: 'top',
+          });
           let ref = document.getElementById('cancel');
           ref?.click();
           this.kanbanForm.reset();
           this.getAllList();
         },
         (error) => {
-          console.error('Error updating list:', error);
-          alert('Something went wrong!');
+          // console.error('Error updating list:', error);
+          // alert('Something went wrong!');
+          this._snackBar.open('Something went Wrong!.', '', {
+            duration: 2000,
+            verticalPosition: 'top',
+          });
         }
       );
   }
@@ -179,11 +223,19 @@ export class KanbanComponent {
   deleteList(list: any) {
     this.api.deleteList(list.id).subscribe(
       (res) => {
-        alert('List Deleted!');
+        // alert('List Deleted!');
+        this._snackBar.open('List Deleted!', '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
         this.getAllList();
       },
       (error) => {
         console.error('Error deleting list:', error);
+        this._snackBar.open('Error deleting list!', '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
       }
     );
   }
@@ -210,14 +262,22 @@ export class KanbanComponent {
     this.api.postTask(this.taskModelObj).subscribe(
       (res) => {
         console.log(res);
-        alert('Task added successfully!');
+        // alert('Task added successfully!');
+        this._snackBar.open('Task Added Successfully!', '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
         let ref = document.getElementById('cancel');
         ref?.click();
         this.kanbanForm.reset();
         this.getAllList();
       },
       (error) => {
-        alert('Task Error!');
+        // alert('Task Error!');
+        this._snackBar.open('Task Error!', '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
       }
     );
   }
@@ -247,7 +307,11 @@ export class KanbanComponent {
       .subscribe(
         (res) => {
           console.log(res);
-          alert('Task updated successfully!');
+          // alert('Task updated successfully!');
+          this._snackBar.open('Task Update Successfully!.', '', {
+            duration: 2000,
+            verticalPosition: 'top',
+          });
           let ref = document.getElementById('cancel');
           ref?.click();
           this.kanbanForm.reset();
@@ -255,7 +319,11 @@ export class KanbanComponent {
         },
         (error) => {
           console.error('Error updating task:', error);
-          alert('Something went wrong!');
+          // alert('Something went wrong!');
+          this._snackBar.open('Error Updating Task!', '', {
+            duration: 2000,
+            verticalPosition: 'top',
+          });
         }
       );
   }
@@ -269,11 +337,19 @@ export class KanbanComponent {
   deleteTask(task: any) {
     this.api.deleteTask(task.id).subscribe(
       (res) => {
-        alert('Task Deleted!');
+        // alert('Task Deleted!');
+        this._snackBar.open('Task Deleted Successfully!', '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
         this.getAllList();
       },
       (error) => {
         console.error('Error deleting task:', error);
+        this._snackBar.open('Error Deleting Task!', '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
       }
     );
   }
@@ -286,6 +362,10 @@ export class KanbanComponent {
     this.cookies.delete('user-email');
     this.cookies.delete('user-name');
     this.router.navigate(['/login']);
+    this._snackBar.open('Logout Successfully!.', '', {
+      duration: 2000,
+      verticalPosition: 'top',
+    });
   }
 
   drop(event: CdkDragDrop<string[]>, list_id: number) {
@@ -310,6 +390,10 @@ export class KanbanComponent {
       this.api.updateTask(this.updateTaskModelObj, taskID).subscribe(
         (res) => {
           console.log(res);
+          this._snackBar.open('Task Update Successfully!', '', {
+            duration: 2000,
+            verticalPosition: 'top',
+          });
           let ref = document.getElementById('cancel');
           ref?.click();
           this.kanbanForm.reset();
@@ -317,9 +401,40 @@ export class KanbanComponent {
         },
         (error) => {
           console.error('Error updating task:', error);
-          alert('Something went wrong!');
+          // alert('Something went wrong!');
+          this._snackBar.open('Error Updatating Task!', '', {
+            duration: 2000,
+            verticalPosition: 'top',
+          });
         }
       );
+    }
+  }
+
+  private loadExternalScript(scriptUrl: string): HTMLScriptElement {
+    const script = this.renderer.createElement('script');
+    script.type = 'text/javascript';
+    script.src = scriptUrl;
+    this.renderer.appendChild(document.body, script);
+    return script;
+  }
+
+  toggleSidebar(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (target.classList.contains('bx-menu')) {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) {
+        sidebar.classList.toggle('hide');
+      }
+    }
+  }
+
+  toggleDarkMode(event: any) {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
     }
   }
 }

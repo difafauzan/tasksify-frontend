@@ -86,8 +86,8 @@ html {
   overflow-x: hidden;
 }
 body.dark {
-  --light: #0c0c1e;
-  --grey: #060714;
+  --light: #212121;
+  --grey: #121212;
   --dark: #fbfbfb;
 }
 body {
@@ -137,11 +137,12 @@ body {
 #sidebar .side-menu {
   width: 100%;
   margin-top: 48px;
+  padding-left: 0px;
 }
 #sidebar .side-menu li {
   height: 48px;
   background: transparent;
-  margin-left: 6px;
+  // margin-left: 6px;
   border-radius: 48px 0 0 48px;
   padding: 4px;
 }
@@ -344,8 +345,9 @@ body {
   padding: 36px 24px;
   font-family: var(--poppins);
   max-height: calc(100vh - 56px);
+  // margin-left: px;
   // overflow-y: auto;
-  // overflow-x: auto;
+  // overflow-x: scroll;
 }
 #content main .head-title {
   display: flex;
@@ -353,17 +355,19 @@ body {
   justify-content: space-between;
   grid-gap: 16px;
   flex-wrap: wrap;
+  padding-left: 1.5rem;
 }
 #content main .head-title .left h1 {
   font-size: 36px;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   color: var(--dark);
 }
 #content main .head-title .left .breadcrumb {
   display: flex;
   align-items: center;
   grid-gap: 16px;
+  margin-left: 10px;
 }
 #content main .head-title .left .breadcrumb li {
   color: var(--dark);
@@ -381,7 +385,7 @@ body {
   padding: 0 16px;
   border-radius: 36px;
   background: var(--blue);
-  color: var(--light);
+  color: #fbfbfb;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -391,7 +395,7 @@ body {
 #content main .box-info {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(140px, 25%), 1fr));
-  grid-gap: 18px;
+  grid-gap: 24px;
   margin-top: 20px;
   max-width: auto;
 }
@@ -412,6 +416,10 @@ body {
   display: flex;
   align-items: center;
   grid-gap: 24px;
+
+  .project-info {
+    color: var(--dark);
+  }
 }
 #content main .box-info li .bx {
   width: 80px;
@@ -449,7 +457,7 @@ body {
   grid-gap: 24px;
   margin-top: 24px;
   color: var(--dark);
-  overflow-x: auto;
+  // overflow-x: auto;
   white-space: nowrap;
   min-width: 320px !important;
 }
@@ -549,6 +557,7 @@ body {
   padding: 14px 20px;
   justify-content: space-between;
   align-items: center;
+  color: #121212;
 }
 #content main .table-data .todo .todo-list li .bx {
   cursor: pointer;

@@ -53,7 +53,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     DragDropModule,
     MatSnackBarModule,
   ],
-  providers: [CookieService, Response],
+  providers: [CookieService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
