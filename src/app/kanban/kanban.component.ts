@@ -138,7 +138,6 @@ export class KanbanComponent {
 
     this.api.postList(this.listModelObj).subscribe(
       (res) => {
-        this.createInitialTask(res.id);
 
         // alert('Post Added Succesfully!');
         this._snackBar.open('Post Added Successfully!.', '', {
