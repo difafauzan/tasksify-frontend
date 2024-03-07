@@ -19,7 +19,7 @@ export class ApiService {
     });
     let options = { headers: headers };
 
-    return this.http.get('http://192.168.129.130:3000/user', options).pipe(
+    return this.http.get('http://192.168.50.92:3000/user', options).pipe(
       map((response: any) => {
         return response;
       })
@@ -37,7 +37,7 @@ export class ApiService {
     let options = { headers: headers };
     // console.log(data);
     return this.http
-      .post('http://192.168.129.130:3000/board/create', data, options)
+      .post('http://192.168.50.92:3000/board/create', data, options)
       .pipe(
         map((response: any) => {
           // console.log(data);
@@ -56,12 +56,14 @@ export class ApiService {
     let options = { headers: headers };
 
     let data = { userId: userId };
-    return this.http.post('http://192.168.129.130:3000/board', data, options).pipe(
-      map((response: any) => {
-        // console.log(response);
-        return response;
-      })
-    );
+    return this.http
+      .post('http://192.168.50.92:3000/board', data, options)
+      .pipe(
+        map((response: any) => {
+          // console.log(response);
+          return response;
+        })
+      );
   }
 
   getBoardById(id: any) {
@@ -74,7 +76,7 @@ export class ApiService {
     let options = { headers: headers };
 
     return this.http
-      .get<any>('http://192.168.129.130:3000/board/' + id, options)
+      .get<any>('http://192.168.50.92:3000/board/' + id, options)
       .pipe(
         map((response: any) => {
           return response;
@@ -92,7 +94,7 @@ export class ApiService {
     let options = { headers: headers };
 
     return this.http
-      .patch<any>('http://192.168.129.130:3000/board/' + id, data, options)
+      .patch<any>('http://192.168.50.92:3000/board/' + id, data, options)
       .pipe(
         map((response: any) => {
           return response;
@@ -110,7 +112,7 @@ export class ApiService {
     let options = { headers: headers };
 
     return this.http
-      .delete<any>('http://192.168.129.130:3000/board/' + id, options)
+      .delete<any>('http://192.168.50.92:3000/board/' + id, options)
       .pipe(
         map((response: any) => {
           return response;
@@ -128,7 +130,7 @@ export class ApiService {
     });
     let options = { headers: headers };
 
-    return this.http.post('http://192.168.129.130:3000/list', data, options).pipe(
+    return this.http.post('http://192.168.50.92:3000/list', data, options).pipe(
       map((response: any) => {
         return response;
       })
@@ -143,7 +145,7 @@ export class ApiService {
       Authorization: 'Bearer ' + accessToken,
     });
     let options = { headers: headers };
-    return this.http.get<any>('http://192.168.129.130:3000/list', options).pipe(
+    return this.http.get<any>('http://192.168.50.92:3000/list', options).pipe(
       map((response: any) => {
         return response;
       })
@@ -159,7 +161,7 @@ export class ApiService {
     });
     let options = { headers: headers };
     return this.http
-      .patch<any>('http://192.168.129.130:3000/list/' + id, data, options)
+      .patch<any>('http://192.168.50.92:3000/list/' + id, data, options)
       .pipe(
         map((response: any) => {
           return response;
@@ -176,7 +178,7 @@ export class ApiService {
     });
     let options = { headers: headers };
     return this.http
-      .delete<any>('http://192.168.129.130:3000/list/' + id, options)
+      .delete<any>('http://192.168.50.92:3000/list/' + id, options)
       .pipe(
         map((response: any) => {
           return response;
@@ -194,7 +196,7 @@ export class ApiService {
     });
     let options = { headers: headers };
     return this.http
-      .post('http://192.168.129.130:3000/task/create', data, options)
+      .post('http://192.168.50.92:3000/task/create', data, options)
       .pipe(
         map((response: any) => {
           return response;
@@ -210,7 +212,7 @@ export class ApiService {
       Authorization: 'Bearer ' + accessToken,
     });
     let options = { headers: headers };
-    return this.http.get<any>('http://192.168.129.130:3000/task', options).pipe(
+    return this.http.get<any>('http://192.168.50.92:3000/task', options).pipe(
       map((response: any) => {
         return response;
       })
@@ -227,7 +229,7 @@ export class ApiService {
     let options = { headers: headers };
     console.log(data, id);
     return this.http
-      .put<any>('http://192.168.129.130:3000/task/' + id, data, options)
+      .put<any>('http://192.168.50.92:3000/task/' + id, data, options)
       .pipe(
         map((response: any) => {
           return response;
@@ -244,7 +246,7 @@ export class ApiService {
     });
     let options = { headers: headers };
     return this.http
-      .delete<any>('http://192.168.129.130:3000/task/' + id, options)
+      .delete<any>('http://192.168.50.92:3000/task/' + id, options)
       .pipe(
         map((response: any) => {
           return response;
@@ -262,7 +264,7 @@ export class ApiService {
 
     return this.http
       .post<any>(
-        'http://192.168.129.130:3000/board-members/add-member/',
+        'http://192.168.50.92:3000/board-members/add-member/',
         data,
         options
       )

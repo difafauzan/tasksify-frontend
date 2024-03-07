@@ -3,7 +3,7 @@
   <a routerLink="/board" class="brand">
     <i class="bx bxs-layout" style="padding-left: 20px"></i>
 
-    <span class="text">Tasksify</span>
+    <span class="text">Taskify</span>
   </a>
   <ul class="side-menu top">
     <li class="active">
@@ -293,6 +293,7 @@
               (click)="updateBoardDetails()"
               type="button"
               class="btn btn-primary"
+              data-bs-dismiss="modal"
             >
               Update Board
             </button>
@@ -341,7 +342,7 @@
               </div>
             </form>
           </div>
-          
+
           <div class="modal-footer">
             <button
               id="cancel"

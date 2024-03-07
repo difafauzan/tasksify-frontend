@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const userData = this.loginForm.value;
       this.http
-        .post<any>('http://192.168.129.130:3000/auth/login', userData, options)
+        .post<any>('http://192.168.50.92:3000/auth/login', userData, options)
         .pipe(
           catchError((error: any) => {
             // console.error('Error during login:', error);

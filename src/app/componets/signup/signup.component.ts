@@ -45,7 +45,7 @@ export class SignupComponent implements OnInit {
       console.log(userData);
 
       this.http
-        .post<any>('http://192.168.1.24:3000/auth/register', userData)
+        .post<any>('http://192.168.50.92/auth/register', userData)
         .pipe(
           catchError((error: any) => {
             // console.error('Error during registration:', error);
