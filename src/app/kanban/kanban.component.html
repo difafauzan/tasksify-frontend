@@ -61,9 +61,20 @@
   <main>
     <div class="head-title">
       <div class="left d-flex">
-        <h1 style="margin-right: 24px">{{ boardName }}</h1>
+        <h1 style="margin-right: 24px; text-transform: capitalize;">{{ boardName }}</h1>
 
-        <div *ngFor="let user of users">
+        <a class="profile" style="margin-right: -8px">
+          <img
+            src="https://ui-avatars.com/api/name={{
+              boardCreator.name
+            }}&background=random"
+            alt="Profile Image"
+            height="40"
+            class="rounded-circle"
+            style="border: 3px solid #ff00dd"
+          />
+        </a>
+        <div *ngFor="let user of users | slice:0:2;">
           <a class="profile" style="margin-right: -8px">
             <img
               src="https://ui-avatars.com/api/name={{
@@ -75,16 +86,18 @@
               style="border: 3px solid #ff00dd"
             />
           </a>
-          <!-- <ul class="breadcrumb">
-            <li>
-              <a href="#">My Task</a>
-            </li>
-            <li><i class="bx bx-chevron-right"></i></li>
-            <li>
-              <a class="active" href="#">Project</a>
-            </li>
-          </ul> -->
         </div>
+        <a *ngIf="users.length > 2" class="profile" style="margin-right: -8px">
+          <img
+            src="https://ui-avatars.com/api/name={{
+              (users.length) - 2
+            }}&background=random"
+            alt="Profile Image"
+            height="40"
+            class="rounded-circle"
+            style="border: 3px solid #ff00dd"
+          />
+        </a>
         <a
           class="profile"
           style="margin-right: -8px"
@@ -112,7 +125,7 @@
     </div>
 
     <!-- Start  Component kanban -->
-    <div class="table-data" cdkDropListGroup>
+    <div class="table-data" cdkDropListGroup style="overflow-x: scroll !important; height: 100% !important;">
       @for(list of listData; track list){
       <div class="order">
         <div class="todo">
@@ -521,8 +534,38 @@
                 </select>
               </div>
             </form>
+
+            <a class="profile d-flex w-100 m-0" style="width: 100%">
+              <img
+                src="https://ui-avatars.com/api/name={{ boardCreator.name }}"
+                alt="Profile Image"
+                height="40"
+                class="rounded-circle"
+                style="border: 3px solid #ff00dd"
+              />
+              <div
+                class="d-flex"
+                style="
+                  margin-left: 8px;
+                  justify-content: space-between;
+                  width: 100%;
+                "
+              >
+                <div class="d-block">
+                  <span
+                    class="text-dark"
+                    style="font-size: 16px; font-weight: bold"
+                    >{{ boardCreator.name }} (Owner)</span
+                  >
+                  <br />
+                  <span class="text-dark" style="font-size: 12px">{{
+                    boardCreator.email
+                  }}</span>
+                </div>
+              </div>
+            </a>
             <div *ngFor="let user of users">
-              <a class="profile d-flex w-100 m-0 mb-2" style="width: 100%">
+              <a class="profile d-flex w-100 m-0 mt-3" style="width: 100%">
                 <img
                   src="https://ui-avatars.com/api/name={{ user.name }}"
                   alt="Profile Image"
@@ -550,7 +593,7 @@
                     }}</span>
                   </div>
 
-                  <button type="button" class="btn btn-sm btn-danger">
+                  <button type="button" class="btn btn-sm btn-danger" (click)="removeMember(user.id)">
                     Remove
                   </button>
                 </div>
@@ -571,6 +614,7 @@
               type="button"
               class="btn btn-primary"
               data-bs-dismiss="modal"
+              (click)="addMember()"
             >
               Add Members
             </button>

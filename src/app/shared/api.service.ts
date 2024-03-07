@@ -273,8 +273,25 @@ export class ApiService {
       );
   }
   // end tasks API
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+
+  removeMember(data: any){
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
+
+    return this.http
+      .post<any>(
+        'http://192.168.129.130:3000/board-members/remove-member/',
+        data,
+        options
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, Injectable, OnInit, Renderer2 } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -20,6 +20,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { updateListModel, updateTaskModel } from './update.kanban.model';
 import { map } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { colabModel } from '../componets/board/colab.model';
 
 @Component({
   selector: 'app-kanban',
@@ -62,7 +63,9 @@ export class KanbanComponent {
   task: any;
   username?: string;
   users!: any[];
+  boardCreator!: any;
   notMemberUsers!: any[];
+  colabModelObj: colabModel = new colabModel();
 
   constructor(
     // private ucok: formatDat,
@@ -86,6 +89,7 @@ export class KanbanComponent {
     });
     this.memberForm = this.fb.group({
       user_id: ['', Validators.required],
+      board_id: ['', Validators.required],
     });
     this.loadExternalScript('/src/assets/js/script.js');
     this.username = this.cookies.get('user-name');
@@ -160,7 +164,8 @@ export class KanbanComponent {
 
   async getAllList() {
     return this.api.getBoardById(this.boardId).subscribe((res: any) => {
-      // console.log(res);
+      this.boardCreator = res.creator;
+      console.log(this.boardCreator)
       let temp = [];
       for (let n = 0; n < res.board_members.length; n++) {
         temp.push(res.board_members[n].user);
@@ -436,5 +441,40 @@ export class KanbanComponent {
     } else {
       document.body.classList.remove('dark');
     }
+  }
+
+  async addMember(){
+    this.colabModelObj.user_id = +this.memberForm.value.user_id;
+    this.colabModelObj.board_id = +this.boardId;
+    this.api.addColab(this.colabModelObj).subscribe(
+      (res) => {
+        window.location.reload();
+        // alert('Board added succesfully!');
+        this._snackBar.open('Member Added Successfully!', '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
+        let ref = document.getElementById('cancel');
+        ref?.click();
+        this.memberForm.reset();
+        this.getAllList();
+      },
+      (error) => {
+        // alert('Something went wrong!');
+        this._snackBar.open('Something Went Wrong!', '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
+      }
+    );
+  }
+
+  async removeMember(userId: number){
+    this.colabModelObj.board_id = this.boardId;
+    this.colabModelObj.user_id = userId;
+    // console.log(this.colabModelObj)
+    this.api.removeMember(this.colabModelObj).subscribe((res) => {
+      window.location.reload();
+    })
   }
 }
