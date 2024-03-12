@@ -25,6 +25,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 // Material UI
 import { MatCardModule } from '@angular/material/card';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HomeComponent } from './componets/home/home.component';
 
 // import { Response } from 'express';
 
@@ -38,6 +39,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     VerifyEmailComponent,
     ResetPasswordComponent,
     ForgotPasswordComponent,
+    HomeComponent,
   ],
   imports: [
     AppRoutingModule,

@@ -54,8 +54,7 @@ export class BoardComponent {
     private _snackBar: MatSnackBar
   ) {}
 
-  ngOnInit(): void
-  {
+  ngOnInit(): void {
     this.boardForm = this.fb.group({
       name: ['', Validators.required],
     });
@@ -211,7 +210,7 @@ export class BoardComponent {
     this.cookies.delete('user-id');
     this.cookies.delete('user-email');
     this.cookies.delete('user-name');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
     this._snackBar.open('Logout Successfully!', '', {
       duration: 2000,
       verticalPosition: 'top',
@@ -252,7 +251,7 @@ export class BoardComponent {
 
   addCollaborator() {
     this.colabModelObj.user_id = +this.memberForm.value.user_id;
-    
+
     this.api.addColab(this.colabModelObj).subscribe(
       (res) => {
         console.log(res);
