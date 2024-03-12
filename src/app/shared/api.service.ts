@@ -286,7 +286,7 @@ export class ApiService {
 
     return this.http
       .post<any>(
-        'http://192.168.129.130:3000/board-members/remove-member/',
+        'http://192.168.50.92:3000/board-members/remove-member/',
         data,
         options
       )
