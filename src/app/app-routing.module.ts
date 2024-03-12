@@ -12,7 +12,10 @@ import { SidebarComponent } from './componets/sidebar/sidebar.component';
 import { NavbarComponent } from './componets/navbar/navbar.component';
 import { NotFoundComponent } from './componets/not-found/not-found.component';
 import { HeaderComponent } from './componets/header/header.component';
+import { HomeComponent } from './componets/home/home.component';
 const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+
   // Auth
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
@@ -21,6 +24,7 @@ const routes: Routes = [
   { path: 'verify-email/:token', component: VerifyEmailComponent },
 
   // Feature
+  { path: 'home', component: HomeComponent },
   {
     path: 'board',
     component: BoardComponent,
@@ -42,12 +46,11 @@ const routes: Routes = [
       },
     ],
   },
-
   // Style component
   { path: 'sidebar', component: SidebarComponent },
   { path: 'navbar', component: NavbarComponent },
   { path: 'header', component: HeaderComponent },
-  { path: '**', component: NotFoundComponent },
+  // { path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({

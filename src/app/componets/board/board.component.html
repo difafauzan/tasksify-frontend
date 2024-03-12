@@ -1,8 +1,9 @@
 <!-- SIDEBAR -->
 <section id="sidebar">
-  <a href="#" class="brand">
+  <a routerLink="/board" class="brand">
     <i class="bx bxs-layout" style="padding-left: 20px"></i>
-    <span class="text">Tasksify</span>
+
+    <span class="text">Taskify</span>
   </a>
   <ul class="side-menu top">
     <li class="active">
@@ -11,12 +12,6 @@
         <span class="text">Dashboard</span>
       </a>
     </li>
-    <!-- <li>
-      <a routerLink="/kanban">
-        <i class="bx bxs-shopping-bag-alt"></i>
-        <span class="text">My task</span>
-      </a>
-    </li> -->
   </ul>
   <ul class="side-menu">
     <li>
@@ -33,23 +28,21 @@
 <section id="content">
   <!-- NAVBAR -->
   <nav>
-    <i class="bx bx-menu"></i>
+    <i class="bx bx-menu" (click)="toggleSidebar($event)"></i>
+
     <form action="#"></form>
-    <input type="checkbox" id="switch-mode" hidden />
+    <input
+      type="checkbox"
+      id="switch-mode"
+      hidden
+      (change)="toggleDarkMode($event)"
+    />
     <label for="switch-mode" class="switch-mode"></label>
-    <a href="#" class="notification">
-      <i class="bx bxs-bell"></i>
-      <span class="num">8</span>
-    </a>
 
-    <a class="nav-link">Hi, Difa </a>
+    <a class="nav-link">Hi, {{ username }} </a>
     <a class="profile">
-      <!-- Uncomment the following line if you want to include the image from a local path -->
-      <!-- <img src="../../../assets/img/people.png" alt="Profile Image" /> -->
-
-      <!-- Use the following line if you want to generate a profile image using the ui-avatars.com API -->
       <img
-        src="https://ui-avatars.com/api/name=Difa"
+        src="https://ui-avatars.com/api/name={{ username }}"
         alt="Profile Image"
         height="60"
         class="rounded-circle"
@@ -62,16 +55,7 @@
   <main>
     <div class="head-title">
       <div class="left">
-        <h1>Dashboard</h1>
-        <ul class="breadcrumb">
-          <li>
-            <a class="active" routerLink="/board">Dashboard</a>
-          </li>
-          <li><i class="bx bx-chevron-right"></i></li>
-          <li>
-            <a class="active" routerLink="/board">Board</a>
-          </li>
-        </ul>
+        <h1>Your Workspaces</h1>
       </div>
       <a
         class="btn-create-card"
@@ -84,7 +68,7 @@
     </div>
 
     <ul class="box-info">
-      <li *ngFor="let row of boardData" class="mb-1">
+      <li *ngFor="let row of ownedBoardData" class="mb-1">
         <div
           class="card-body"
           style="display: flex; align-items: center; cursor: pointer"
@@ -104,7 +88,7 @@
             (click)="goToKanbanPage(row)"
             style="margin-left: 15px"
           >
-            <h5 style="margin-top: 10px">{{ row.name }}</h5>
+            <h5 style="margin-top: 10px; text-transform: capitalize;">{{ row.name }}</h5>
           </div>
 
           <button
@@ -140,13 +124,62 @@
               <mat-icon>delete</mat-icon>
               <span>Delete</span>
             </button>
+            <button
+              mat-menu-item
+              class="modal-title btn btn-success"
+              id="exampleModalLabel"
+              (click)="addColabBoard(row)"
+              data-bs-toggle="modal"
+              data-bs-target="#createColabModal"
+              style="color: black"
+            >
+              <mat-icon>group_work</mat-icon>
+              <span>Add Collaborator</span>
+            </button>
           </mat-menu>
         </div>
       </li>
     </ul>
 
-    <!-- Modal Create -->
+    <br />
+    <br />
 
+    <div class="head-title">
+      <div class="left">
+        <h1>Collaborate</h1>
+      </div>
+    </div>
+
+    <!-- Start page Colab  -->
+    <ul class="box-info">
+      <li *ngFor="let row of collabBoardData" class="mb-1">
+        <div
+          class="card-body"
+          style="display: flex; align-items: center; cursor: pointer"
+        >
+          <!-- Profile Image -->
+          <img
+            src="https://ui-avatars.com/api/?name={{
+              row.name
+            }}&background=random"
+            height="60"
+            class="rounded-circle"
+            (click)="goToKanbanPage(row)"
+          />
+
+          <div
+            class="project-info"
+            (click)="goToKanbanPage(row)"
+            style="margin-left: 15px"
+          >
+            <h5 style="margin-top: 10px">{{ row.name }}</h5>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <!-- End page Colab -->
+
+    <!-- Start Modal Create -->
     <div
       class="modal fade"
       id="createBoardModal"
@@ -210,10 +243,9 @@
         </div>
       </div>
     </div>
+    <!-- end Modal Create-->
 
-    <!-- Updated HTML -->
-
-    <!-- Modal Edit -->
+    <!-- Start Modal Edit -->
     <div
       class="modal fade"
       id="editBoardModal"
@@ -261,6 +293,7 @@
               (click)="updateBoardDetails()"
               type="button"
               class="btn btn-primary"
+              data-bs-dismiss="modal"
             >
               Update Board
             </button>
@@ -268,6 +301,70 @@
         </div>
       </div>
     </div>
+    <!-- end of Modal Edit  -->
+
+    <!-- start modal colab -->
+    <div
+      class="modal fade"
+      id="createColabModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Colaborator</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Add your form elements for editing a board here -->
+            <form [formGroup]="memberForm">
+              <!-- Example form elements -->
+              <div class="mb-3 d-flex flex-column">
+                <label for="member" class="form-label">Member</label>
+                <select
+                  formControlName="user_id"
+                  name="user_id"
+                  class="custom-select"
+                  id=""
+                >
+                  <option selected disabled>Select the collaborators</option>
+                  <option *ngFor="let user of users" [value]="user.id">
+                    {{ user.name }}
+                  </option>
+                </select>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              id="cancel"
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="addCollaborator()"
+              data-bs-dismiss="modal"
+            >
+              Add Members
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end modal page colab -->
   </main>
 
   <!-- MAIN -->

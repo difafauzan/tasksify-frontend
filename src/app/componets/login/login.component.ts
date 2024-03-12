@@ -7,6 +7,7 @@ import { catchError } from 'rxjs';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
@@ -41,13 +42,24 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    // Set access token
+    let accessToken = this.cookies.get('access-token');
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + accessToken,
+    });
+    let options = { headers: headers };
     if (this.loginForm.valid) {
       const userData = this.loginForm.value;
       this.http
-        .post<any>('http://192.168.1.19:3000/auth/login', userData)
+        .post<any>('http://192.168.50.92:3000/auth/login', userData, options)
         .pipe(
           catchError((error: any) => {
-            console.error('Error during login:', error);
+            // console.error('Error during login:', error);
+            this._snackBar.open('Error during login!', '', {
+              duration: 2000,
+              verticalPosition: 'top',
+            });
             throw error;
           })
         )
@@ -61,29 +73,32 @@ export class LoginComponent implements OnInit {
               this.cookies.set('user-email', res.user.email);
               this.cookies.set('user-name', res.user.name);
 
-              console.log('User logged in successfully:', res);
+              // console.log('User logged in successfully:', res);
               this._snackBar.open('Login Successfully!', '', {
                 duration: 2000,
+                verticalPosition: 'top',
               });
               this.router.navigate(['/board']);
             } else {
               // Handle invalid login response
-              console.error('Invalid login response:', res);
-              // alert('Invalid login response. Please try again.');
+              // console.error('Invalid login response:', res);
+
               this._snackBar.open(
                 'Invalid login response. Please try again.',
                 '',
                 {
                   duration: 2000,
+                  verticalPosition: 'top',
                 }
               );
             }
           },
           (error) => {
-            console.error('Login failed:', error);
+            // console.error('Login failed:', error);
             // alert('Login failed. Please try again.');
             this._snackBar.open('Login failed , please try again!', '', {
               duration: 2000,
+              verticalPosition: 'top',
             });
           }
         );
@@ -93,6 +108,7 @@ export class LoginComponent implements OnInit {
       // console.log('Form is not valid');
       this._snackBar.open('Form is not valid!', '', {
         duration: 2000,
+        verticalPosition: 'top',
       });
     }
   }

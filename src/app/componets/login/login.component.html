@@ -1,7 +1,7 @@
 <div class="outer">
   <div class="container">
     <div class="row">
-      <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
+      <div class="offset-md-5 col-lg-4 col-lg- offset-lg-4 offset-md-2">
         <div class="panel border bg-white">
           <div class="panel-heading">
             <h3 class="pt-3 font-weight-bold">Login</h3>
@@ -12,17 +12,17 @@
                 <div
                   class="input-field"
                   [class.erroforr]="
-                    loginForm.controls['username'].dirty &&
-                    loginForm.hasError('required', 'username')
+                    loginForm.controls['email'].dirty &&
+                    loginForm.hasError('required', 'email')
                   "
                 >
                   <span class="fa fa-user p-2"></span>
                   <input
-                    formControlName="username"
-                    id="username"
+                    formControlName="email"
+                    id="email"
                     type="text"
                     class="form-control"
-                    placeholder="Username"
+                    placeholder="Email"
                   />
                 </div>
               </div>
@@ -32,7 +32,7 @@
                   loginForm.hasError('required', 'password')
                 "
                 class="text-danger"
-                >*Username is required</small
+                >*Email is required</small
               >
               <div class="form-group pt-3">
                 <div
@@ -48,7 +48,7 @@
                     id="password"
                     type="password"
                     [type]="type"
-                    class="fa {{ eyeIcon }}"
+                    class="form-control"
                     placeholder="Password"
                   />
                   <span (click)="hideShowPass()" class="fa fa-eye-slash"></span>
@@ -74,7 +74,7 @@
               </button>
               <div class="text-center pt-4 text-muted">
                 Don't have account?
-                <a id="forget" routerLink="/signup">Sign Up</a>
+                <a id="signup" routerLink="/signup">Sign Up</a>
               </div>
             </form>
           </div>

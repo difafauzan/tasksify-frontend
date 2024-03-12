@@ -21,7 +21,7 @@ export class SignupComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private route: Router,
-    private snackBar: MatSnackBar
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -43,24 +43,37 @@ export class SignupComponent implements OnInit {
     if (this.signUpForm.valid) {
       const userData = this.signUpForm.value;
       console.log(userData);
-      // Make a POST request to your API for user registration
+
       this.http
-        .post<any>('http://192.168.1.19:3000/auth/register', userData)
+        .post<any>('http://192.168.50.92/auth/register', userData)
         .pipe(
           catchError((error: any) => {
-            console.error('Error during registration:', error);
+            // console.error('Error during registration:', error);
+            this._snackBar.open('Error during registration!', '', {
+              duration: 2000,
+              verticalPosition: 'top',
+            });
+
             throw error;
           })
         )
         .subscribe((response) => {
-          console.log('User registered successfully:', response);
+          // console.log('User registered successfully:', response);
         });
       this.route.navigate(['/login']);
-      alert('Selamat anda telah berhasil melakukan registrasi!');
+      // alert('Selamat anda telah berhasil melakukan registrasi!');
+      this._snackBar.open('User registered successfully!.', '', {
+        duration: 2000,
+        verticalPosition: 'top',
+      });
     } else {
       // View error
       ValidateForm.validateAllFormFileds(this.signUpForm);
-      console.log('Form is not valid');
+      // console.log('Form is not valid');
+      this._snackBar.open('Form is not valid!', '', {
+        duration: 2000,
+        verticalPosition: 'top',
+      });
     }
   }
 }

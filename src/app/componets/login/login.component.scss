@@ -1,6 +1,9 @@
 .outer {
-  height: 100vh;
+  height: 100svh;
   background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .panel-heading {
@@ -34,7 +37,7 @@ a.hover {
   min-height: 380px;
   box-shadow: 20px 20px 80px rgb(218, 218, 218);
   border-radius: 15px;
-  margin-top: 100px;
+  // margin-top: 100px;
 }
 
 .input-field {
@@ -66,24 +69,7 @@ input[type="password"] {
   box-shadow: none;
 }
 
-img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 50%;
-  position: relative;
-}
-
-.bordert {
+.border {
   border-top: 1px #aaa;
   position: relative;
-}
-
-.bordert::after {
-  content: "or connect with";
-  position: absolute;
-  top: -13px;
-  left: 33%;
-  background-color: #fff;
-  padding: 0 8px;
 }

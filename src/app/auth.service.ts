@@ -13,11 +13,7 @@ export class AuthService {
   private apiUrl = 'http://192.168.1.19:3000/auth'; // replace with your NestJS server URL
   private tokenKey = 'authToken';
 
-  constructor(
-    private http: HttpClient,
-    private route: Router,
-    private cookies: CookieService
-  ) {}
+  constructor(private http: HttpClient, private cookies: CookieService) {}
 
   login(username: string, password: string): Observable<any> {
     // Fix: Observable type
@@ -31,7 +27,9 @@ export class AuthService {
         }),
         catchError((error: any) => {
           console.error('Error during login:', error);
+          
           throw error;
+          
         })
       );
   }
